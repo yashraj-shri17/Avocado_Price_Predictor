@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avocado Price Predictor</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container text-center">
+        <div class="header-text mb-4">
+            <span class="badge bg-success">AI-Powered</span>
+            <h1>Avocado Price Predictor</h1>
+            <p>Enter your avocado details below and let our advanced AI model predict the perfect price for your produce.</p>
+        </div>
+        <div class="card p-4">
+            <form method="post" action="{{ url_for('predict') }}">
+                <!-- Date Input -->
+                <div class="mb-3">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-control" name="date" required>
+                </div>
+
+                <!-- Total Volume and Total Bags -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Total Volume</label>
+                        <input type="number" class="form-control" name="total_volume" value="0" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Total Bags</label>
+                        <input type="number" class="form-control" name="total_bag" value="0" required>
+                    </div>
+                </div>
+
+                <!-- Small, Large, and XLarge Bags -->
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Small Bags</label>
+                        <input type="number" class="form-control" name="small_bags" value="0" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Large Bags</label>
+                        <input type="number" class="form-control" name="large_bags" value="0" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">XLarge Bags</label>
+                        <input type="number" class="form-control" name="xlarge_bags" value="0" required>
+                    </div>
+                </div>
+
+                <!-- Type and Region Selection -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Type</label>
+                        <select class="form-select" name="type" required>
+                            <!-- <option value="" selected disabled>Select type</option> -->
+                            <option value="conventional">Conventional</option>
+                            <option value="organic">Organic</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Region</label>
+                        <select class="form-select" name="region" required>
+                            <option value="albany">Albany</option>
+                            <option value="atlanta">Atlanta</option>
+                            <option value="baltimorewashington">Baltimore/Washington</option>
+                            <option value="boise">Boise</option>
+                            <option value="boston">Boston</option>
+                            <option value="buffalorochester">Buffalo/Rochester</option>
+                            <option value="california">California</option>
+                            <option value="charlotte">Charlotte</option>
+                            <option value="chicago">Chicago</option>
+                            <option value="cincinnatidayton">Cincinnati/Dayton</option>
+                            <option value="columbus">Columbus</option>
+                            <option value="dallasftworth">Dallas/Fort Worth</option>
+                            <option value="denver">Denver</option>
+                            <option value="detroit">Detroit</option>
+                            <option value="grandrapids">Grand Rapids</option>
+                            <option value="greatlakes">Great Lakes</option>
+                            <option value="harrisburgscranton">Harrisburg/Scranton</option>
+                            <option value="hartfordspringfield">Hartford/Springfield</option>
+                            <option value="houston">Houston</option>
+                            <option value="indianapolis">Indianapolis</option>
+                            <option value="jacksonville">Jacksonville</option>
+                            <option value="lasvegas">Las Vegas</option>
+                            <option value="losangeles">Los Angeles</option>
+                            <option value="louisville">Louisville</option>
+                            <option value="miamiftlauderdale">Miami/Ft. Lauderdale</option>
+                            <option value="midsouth">Midsouth</option>
+                            <option value="nashville">Nashville</option>
+                            <option value="neworleansmobile">New Orleans/Mobile</option>
+                            <option value="newyork">New York</option>
+                            <option value="northeast">Northeast</option>
+                            <option value="northernnewengland">Northern New England</option>
+                            <option value="orlando">Orlando</option>
+                            <option value="philadelphia">Philadelphia</option>
+                            <option value="phoenixtucson">Phoenix/Tucson</option>
+                            <option value="pittsburgh">Pittsburgh</option>
+                            <option value="plains">Plains</option>
+                            <option value="portland">Portland</option>
+                            <option value="raleighgreensboro">Raleigh/Greensboro</option>
+                            <option value="richmondnorfolk">Richmond/Norfolk</option>
+                            <option value="roanoke">Roanoke</option>
+                            <option value="sacramento">Sacramento</option>
+                            <option value="sandiego">San Diego</option>
+                            <option value="sanfrancisco">San Francisco</option>
+                            <option value="seattle">Seattle</option>
+                            <option value="southcarolina">South Carolina</option>
+                            <option value="southcentral">South Central</option>
+                            <option value="southeast">Southeast</option>
+                            <option value="spokane">Spokane</option>
+                            <option value="stlouis">St. Louis</option>
+                            <option value="syracuse">Syracuse</option>
+                            <option value="tampa">Tampa</option>
+                            <option value="totalus">Total US</option>
+                            <option value="west">West</option>
+                            <option value="westtexnewmexico">West Texas/New Mexico</option>
+                        </select>
+                        
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Predict Price</button>
+
+                <!-- Display Entered Data (Optional) -->
+                <!-- {% if date %}
+                    <div class="mt-3">
+                        <p class="text-white">Selected Date: {{ date }}</p>
+                    </div>
+                {% endif %}
+                {% if total_volume %}
+                    <p class="text-white">Total Volume: {{ total_volume }}</p>
+                {% endif %}
+                {% if total_bag %}
+                    <p class="text-white">Total Bag: {{ total_bag }}</p>
+                {% endif %}
+                {% if small_bags %}
+                    <p class="text-white">Small Bags: {{ small_bags }}</p>
+                {% endif %}
+                {% if large_bags %}
+                    <p class="text-white">Large Bags: {{ large_bags }}</p>
+                {% endif %}
+                {% if xlarge_bags %}
+                    <p class="text-white">XLarge Bags: {{ xlarge_bags }}</p>
+                {% endif %}
+                {% if type %}
+                    <p class="text-white">Type: {{ type }}</p>
+                {% endif %}
+                {% if region %}
+                    <p class="text-white">Region: {{ region }}</p>
+                {% endif %}
+                {% if scaled_total_volume %}
+                    <p class="text-white">Scaled Total Volume: {{ scaled_total_volume }}</p>
+                {% endif %}
+                {% if scaled_total_bag %}
+                    <p class="text-white">Scaled Total Bags: {{ scaled_total_bag }}</p>
+                {% endif %}
+                {% if scaled_small_bags %}
+                    <p class="text-white">Scaled Small Bags: {{ scaled_small_bags }}</p>
+                {% endif %}
+                {% if month %}
+                    <p class="text-white">Month: {{ month }}</p>
+                {% endif %}
+                {% if quarter %}
+                    <p class="text-white">Quarter: {{ quarter }}</p>
+                {% endif %}
+                {% if year %}
+                    <p class="text-white">Year: {{ year }}</p>
+                {% endif %}
+                {% if region_dict %}
+                    <p class="text-white">Region Dict: {{ region_dict }}</p>
+                {% endif %}
+                {% if features %}
+                    <p class="text-white">Region Dict: {{ features }}</p>
+                {% endif %} -->
+                {% if price %}
+                    <!-- <p class="text-white">The Average Predicted Price is ::  ${{prediction}}</p>                     -->
+                    <p class="text-white">The Average Predicted Price of Avocado is :: ${{ price }}</p>
+
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
